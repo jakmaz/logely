@@ -1,44 +1,92 @@
-# Logely
+# 🚀 Logely
 
-A logging middleware for the [Elysia](https://elysiajs.com) web framework. Developed with [Bun](https://bun.sh).
+A **simple**, **clean**, and **sleek** logging middleware for the [Elysia](https://elysiajs.com) web framework. Developed with [Bun](https://bun.sh), Logely is designed to be **minimalistic** yet powerful, giving you the essential tools to keep track of your application's requests and responses effortlessly.
 
-## Installation
+## 📸 Screenshot Preview
+
+Here's a glimpse of what your logs will look like with Logely:
+
+<div align="center">
+  <img width="466" alt="image" src="https://github.com/user-attachments/assets/c8617d33-6b5a-4137-be30-1f17ce510afc">
+</div>
+
+
+With Logely, your logs are clear, concise, and easy to understand, ensuring that you can quickly grasp what's happening in your application.
+
+## 📦 Installation
+
+Getting started with Logely is a breeze. Install it via Bun with a single command:
 
 ```sh
 bun add @jakmaz/logely
 ```
 
-## Usage/Examples
+## 🚀 Usage
+
+Integrating Logely into your Elysia application is straightforward:
 
 ```typescript
 import { logger } from "@jakmaz/logely";
 import { Elysia } from "elysia";
 
 const app = new Elysia()
-  .use(logger())
+  .use(logger()) // Add this line
   .get("/", () => "Get method!")
   .post("/", () => "Post method!")
   .listen(3000);
 ```
 
-## Configuration
+## ⚙️ Configuration
 
-|  Option  | Description                                                    |
-| :------: | :------------------------------------------------------------- |
-| `logIP`  | Displays the incoming IP Address based on the XFF Header       |
-| `writer` | Uses `write` function to send the log. Defaults to the console |
+Logely comes with a variety of options that allow you to customize the logging behavior to fit your application's needs:
 
-## Result
+|        Option        | Description                                                                                       | Default Value             |
+|:--------------------:|:--------------------------------------------------------------------------------------------------|:--------------------------|
+|    **`showBanner`**  | Displays a startup banner when the server starts. Set to `false` to disable.                       | `true`                    |
+|    **`logLevel`**    | Sets the logging level. Options are `"info"`, `"warn"`, `"error"`. Controls what gets logged.      | `"info"`                  |
+|    **`logRequest`**  | Logs the incoming request details. Great for debugging incoming data.                              | `false`                   |
+|   **`logResponse`**  | Logs the outgoing response details. Perfect for ensuring your responses are as expected.           | `false`                   |
+| **`includeTimestamp`** | Adds a timestamp to each log entry, helping you track when each request was handled.             | `false`                   |
+|   **`logToFile`**    | Outputs logs to a specified file instead of the console. Provide the file path as a string.        | `undefined`               |
 
-![Alt text](https://i.ibb.co/5YknHt6/image.png)
+### 🛠 Example Configuration
 
-Logely also supports printing when there are errors in your application.
+Here's an example of how you can customize Logely to log requests, include timestamps, and change the log level:
 
-## Acknowledgements
+```typescript
+import { logger } from "@jakmaz/logely";
+import { Elysia } from "elysia";
 
-This library is based on code from the following libraries:
+const app = new Elysia()
+  .use(logger({
+    logLevel: "info",
+    logRequest: true,
+    includeTimestamp: true,
+    logToFile: "./logs/app.log"
+  }))
+  .get("/", () => "Get method!")
+  .post("/", () => "Post method!")
+  .listen(3000);
+```
 
-- [Library One](https://github.com/user/library-one): Description of what you used or were inspired by.
-- [Library Two](https://github.com/user/library-two): Description of what you used or were inspired by.
+## 💡 Acknowledgements
 
-A special thanks to the authors and contributors of these projects for their work.
+This library was inspired by code from the following projects:
+
+- [tanishqmanuja/todos-react-elysia](https://github.com/tanishqmanuja/todos-react-elysia): Provided foundational concepts for request logging.
+- [tristanisham/logysia](https://github.com/tristanisham/logysia): Influenced the design of the package.
+
+A huge thanks to the authors and contributors of these projects for their invaluable work.
+
+## 📄 License
+
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for more details.
+
+---
+
+### Summary of Changes:
+- **Screenshot Placement**: The screenshot is now at the top of the README, right after the introductory section, to immediately catch the user's eye.
+- **Concise Intro**: The introduction is kept brief, with a strong focus on the visual appeal of the logs.
+- **Streamlined Flow**: After the screenshot, users are guided through installation, usage, and configuration, ensuring they have all the necessary information without having to scroll too much.
+
+This layout prioritizes the visual impact of the logs while still providing all the detailed information further down.
