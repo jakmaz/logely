@@ -81,12 +81,3 @@ A huge thanks to the authors and contributors of these projects for their invalu
 ## 📄 License
 
 This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for more details.
-
----
-
-### Summary of Changes:
-- **Screenshot Placement**: The screenshot is now at the top of the README, right after the introductory section, to immediately catch the user's eye.
-- **Concise Intro**: The introduction is kept brief, with a strong focus on the visual appeal of the logs.
-- **Streamlined Flow**: After the screenshot, users are guided through installation, usage, and configuration, ensuring they have all the necessary information without having to scroll too much.
-
-This layout prioritizes the visual impact of the logs while still providing all the detailed information further down.
