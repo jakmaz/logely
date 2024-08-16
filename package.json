@@ -1,21 +1,7 @@
 {
   "name": "logely",
   "version": "0.1.0",
-  "description": "Logging middleware for Bun's Elysia web framework",
-  "main": "dist/index.js",
-  "module": "dist/index.js",
-  "types": "dist/index.d.ts",
-  "exports": {
-    "default": "./dist/index.js"
-  },
-  "files": [
-    "dist/index.js",
-    "dist/index.d.ts"
-  ],
-  "scripts": {
-    "build": "rm -rf dist && bun build src/index.ts --outdir ./dist --target bun --minify --external elysia && tsc",
-    "test": "bun run --watch tests/server.ts"
-  },
+  "author": "Jakub Mazur",
   "keywords": [
     "logging",
     "elysia",
@@ -24,8 +10,8 @@
     "logger",
     "middleware"
   ],
-  "author": "Jakub Mazur",
-  "license": "MIT",
+  "description": "Logging middleware for Bun's Elysia web framework",
+  "homepage": "https://github.com/jakmaz/logely#readme",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/jakmaz/logely.git"
@@ -33,7 +19,17 @@
   "bugs": {
     "url": "https://github.com/jakmaz/logely/issues"
   },
-  "homepage": "https://github.com/jakmaz/logely#readme",
+  "license": "MIT",
+  "main": "dist/index.js",
+  "module": "src/index.ts",
+  "type": "module",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "rm -rf dist && bun build src/index.ts --outdir ./dist --target bun --minify --external elysia && tsc",
+    "test": "bun run --watch tests/server.ts"
+  },
   "devDependencies": {
     "bun-types": "^1.1.15",
     "elysia": "^1.0.24",
