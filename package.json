@@ -1,5 +1,5 @@
 {
-  "name": "@jakmaz/logely",
+  "name": "logely",
   "version": "0.1.0",
   "description": "Logging middleware for Bun's Elysia web framework",
   "main": "dist/index.js",
