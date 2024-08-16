@@ -11,8 +11,9 @@ export const logger = (options?: Options) => {
     .onRequest(({ store, request }) => {
       store.requestStartTime = process.hrtime();
       if (options?.logRequest && fmt.shouldLog("info", options?.logLevel)) {
-        console.log(pc.dim("Request:"));
+        console.log(pc.dim("\nRequest:"));
         console.log(request);
+        console.log(" ");
       }
     })
     .onAfterResponse({ as: "global" }, ({ request, set, store, response }) => {
@@ -36,8 +37,9 @@ export const logger = (options?: Options) => {
       }
 
       if (options?.logResponse && fmt.shouldLog("info", options?.logLevel)) {
-        console.log(pc.dim("Response:"));
+        console.log(pc.dim("\nResponse:"));
         console.log(response);
+        console.log(" ");
       }
     })
     .onError({ as: "global" }, ({ request, error, store }) => {
