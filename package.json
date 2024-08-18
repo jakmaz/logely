@@ -27,8 +27,9 @@
     "dist"
   ],
   "scripts": {
+    "dev": "bun run --watch tests/server.ts",
     "build": "rimraf dist && bun build src/index.ts --outdir dist --target bun -e elysia && tsc",
-    "test": "bun run --watch tests/server.ts",
+    "test": "bunx tsc",
     "prepublishOnly": "bun run build && { echo '/*'; cat LICENSE; echo '*/'; cat dist/index.js; } > /tmp/index.js && mv /tmp/index.js dist/index.js"
   },
   "devDependencies": {
