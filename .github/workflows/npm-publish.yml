@@ -1,0 +1,30 @@
+name: Npm Package Publish
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  publish-npm:
+    name: 'Publish to npm registry'
+    runs-on: ubuntu-latest
+    steps:
+        - name: 'Checkout'
+          uses: actions/checkout@v4
+  
+        - name: 'Setup Bun'
+          uses: oven-sh/setup-bun@v1
+          with:
+            bun-version: latest
+            registry-url: "https://registry.npmjs.org"
+  
+        - name: 'Install packages'
+          run: bun install
+  
+        - name: 'Build code'
+          run: bun run build
+          
+        - name: 'Publish'
+          env:
+            NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          run: npm publish
