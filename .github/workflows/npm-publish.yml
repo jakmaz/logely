@@ -20,6 +20,10 @@ jobs:
   
         - name: 'Install packages'
           run: bun install
+
+        - name: 'Test code'
+          run: bun run test
+  
   
         - name: 'Build code'
           run: bun run build
