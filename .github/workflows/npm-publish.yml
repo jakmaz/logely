@@ -17,12 +17,15 @@ jobs:
           with:
             bun-version: latest
             registry-url: "https://registry.npmjs.org"
-  
+
+        - name: 'Set npm registry'
+          run: npm config set registry https://registry.npmjs.org/
+
         - name: 'Install packages'
           run: bun install
-  
-        - name: 'Build code'
-          run: bun run build
+
+        - name: 'Test code'
+          run: bun run test
           
         - name: 'Publish'
           env:
