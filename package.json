@@ -1,6 +1,6 @@
 {
   "name": "logely",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "author": "Jakub Mazur",
   "description": "Logging middleware for Bun's Elysia web framework",
   "keywords": [
