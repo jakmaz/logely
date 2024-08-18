@@ -1,7 +1,14 @@
 import pc from "picocolors";
 import Elysia from "elysia";
-import * as fmt from "./formatters";
 import { Options } from "./options";
+import {
+  formatMethod,
+  printBanner,
+  formatDuration,
+  formatStatus,
+  formatTimestamp,
+} from "./formatters";
+import { logToConsole, logToFile, shouldLog } from "./loggers";
 
 export const logger = (options?: Options) => {
   const startTime = performance.now();
@@ -11,27 +18,11 @@ export const logger = (options?: Options) => {
     .onStart(({ server }) => {
       if (options?.showBanner !== false && server) {
         const startDuration = performance.now() - startTime;
-        fmt.printBanner(startDuration, String(server.url));
+        printBanner(startDuration, String(server.url));
       }
     })
-    .onRequest(({ store, request }) => {
+    .onRequest(({ store }) => {
       store.requestStartTime = process.hrtime();
-
-      if (options?.logRequest && fmt.shouldLog("info", options?.logLevel)) {
-        // Extract specific information from the request
-        const method = request.method;
-        const url = request.url;
-        const userAgent = request.headers.get("user-agent");
-        const host = request.headers.get("host");
-
-        // Log the extracted information with styling
-        console.log(pc.cyan(pc.bold("\nRequest Information:")));
-        console.log(pc.magenta(`Method: ${method}`));
-        console.log(pc.blue(`URL: ${url}`));
-        console.log(pc.yellow(`User-Agent: ${userAgent}`));
-        console.log(pc.green(`Host: ${host}`));
-        console.log(" ");
-      }
     })
     .onError({ as: "global" }, ({ request, error, store }) => {
       const url = new URL(request.url);
@@ -40,44 +31,88 @@ export const logger = (options?: Options) => {
 
       const components: string[] = [
         pc.red("✗"),
-        pc.bold(fmt.method(request.method)),
+        pc.bold(formatMethod(request.method)),
         url.pathname,
-        fmt.status(status) ?? "",
-        pc.dim(`[${fmt.duration(duration)}]`),
+        formatStatus(status) ?? "",
+        pc.dim(`[${formatDuration(duration)}]`),
       ];
 
       if (options?.includeTimestamp) {
-        components.unshift(pc.dim(fmt.formatTimestamp(new Date())));
+        components.unshift(pc.dim(formatTimestamp(new Date())));
       }
 
-      if (fmt.shouldLog("error", options?.logLevel)) {
-        fmt.logMessage(components.filter(Boolean), options?.logToFile);
+      if (shouldLog("error", options?.logLevel)) {
+        logToConsole(components.filter(Boolean));
       }
     })
-    .onAfterResponse({ as: "global" }, ({ request, set, store, response }) => {
-      const url = new URL(request.url);
-      const duration = store.requestStartTime;
+    .onAfterResponse(
+      { as: "global" },
+      ({ request, body, set, store, response, headers, cookie }) => {
+        const responseDuration = store.requestStartTime;
+        const url = new URL(request.url);
 
-      const components: string[] = [
-        pc.green("✓"),
-        pc.bold(fmt.method(request.method)),
-        url.pathname,
-        fmt.status(set.status) ?? "",
-        pc.dim(`[${fmt.duration(duration)}]`),
-      ];
+        // File logging
+        const logEntry = {
+          timestamp: new Date(),
+          duration: responseDuration,
+          request: {
+            method: request.method,
+            url: url.href,
+            headers: request.headers,
+            body: body,
+          },
+          response: {
+            status: set.status,
+            headers: headers,
+            cookie: cookie,
+            body: response,
+          },
+        };
 
-      if (options?.includeTimestamp) {
-        components.unshift(pc.dim(fmt.formatTimestamp(new Date())));
-      }
+        if (options?.logToFile) {
+          logToFile(options.logToFile, logEntry);
+        }
 
-      if (fmt.shouldLog("info", options?.logLevel)) {
-        fmt.logMessage(components.filter(Boolean), options?.logToFile);
-      }
+        // Console logging
+        const consoleComponents: string[] = [
+          pc.green("✓"),
+          pc.bold(formatMethod(request.method)),
+          url.pathname,
+          formatStatus(set.status) ?? "",
+          pc.dim(`[${formatDuration(responseDuration)}]`),
+        ];
 
-      if (options?.logResponse && fmt.shouldLog("info", options?.logLevel)) {
-        console.log(pc.dim("\nResponse:"));
-        console.log(response);
-        console.log(" ");
-      }
-    });
+        if (options?.includeTimestamp) {
+          consoleComponents.unshift(pc.dim(formatTimestamp(new Date())));
+        }
+
+        // Add detailed request and response info if detailLevel is "full"
+        if (options?.detailLevel === "full") {
+          consoleComponents.push(
+            pc.magenta(
+              `\nRequest Headers:\n${JSON.stringify(logEntry.request.headers, null, 2)}`,
+            ),
+          );
+          consoleComponents.push(
+            pc.magenta(
+              `\nRequest Body:\n${JSON.stringify(logEntry.request.body, null, 2)}`,
+            ),
+          );
+          consoleComponents.push(
+            pc.cyan(
+              `\nResponse Headers:\n${JSON.stringify(logEntry.response.headers, null, 2)}`,
+            ),
+          );
+          consoleComponents.push(
+            pc.cyan(
+              `\nResponse Body:\n${JSON.stringify(logEntry.response.body, null, 2)}`,
+            ),
+          );
+        }
+
+        if (shouldLog("info", options?.logLevel)) {
+          logToConsole(consoleComponents);
+        }
+      },
+    );
 };

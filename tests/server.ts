@@ -4,7 +4,7 @@ import { Elysia } from "elysia";
 if (import.meta.main) {
   const PORT = process.env.PORT || 3000;
   const app = new Elysia()
-    .use(logger({ logRequest: true, logResponse: true }))
+    .use(logger({ detailLevel: "full", logToFile: "./logs.json" }))
     .get("/", () => "Get method!")
     .post("/", () => "Post method!")
     .put("/", () => "Put method!")

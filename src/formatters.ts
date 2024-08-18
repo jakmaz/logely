@@ -1,6 +1,6 @@
 import pc from "picocolors";
 
-export function duration(hrtime: [number, number]): string {
+export function formatDuration(hrtime: [number, number]): string {
   const [seconds, nanoseconds] = process.hrtime(hrtime);
   const durationInMicroseconds = (seconds * 1e9 + nanoseconds) / 1e3;
   const durationInMilliseconds = durationInMicroseconds / 1e3;
@@ -37,7 +37,7 @@ const methodColors: Record<string, (text: string) => string> = {
   HEAD: pc.gray,
 };
 
-export function method(method: string): string {
+export function formatMethod(method: string): string {
   return methodColors[method]?.(method) ?? method;
 }
 
@@ -52,7 +52,7 @@ const statusColors: Record<number, (text: string) => string> = {
   500: pc.gray,
 };
 
-export function status(
+export function formatStatus(
   status: number | string | undefined,
 ): string | undefined {
   const statusNumber =
@@ -71,22 +71,3 @@ export function printBanner(duration: number, serverUrl: string) {
     `${pc.green(" ➜ ")} ${pc.bold("Server")}:   ${pc.cyan(serverUrl)}\n`,
   );
 }
-
-// Determine if the log level allows logging the current message
-export const shouldLog = (
-  level: "info" | "warn" | "error",
-  logLevel: "info" | "warn" | "error" = "info",
-) => {
-  const levels = { info: 0, warn: 1, error: 2 };
-  return levels[level] >= levels[logLevel];
-};
-
-// Function to log messages
-export const logMessage = (components: string[], logToFile?: string) => {
-  const message = components.join(" ");
-  if (logToFile) {
-    Bun.write(logToFile, message + "\n");
-  } else {
-    console.log(message);
-  }
-};
