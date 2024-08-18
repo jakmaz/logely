@@ -1,6 +1,6 @@
 export interface Options {
   showBanner?: boolean;
-  logLevel?: "info" | "warn" | "error";
+  logLevel?: "info" | "error";
   detailLevel?: "minimal" | "full";
   includeTimestamp?: boolean;
   logToFile?: string;

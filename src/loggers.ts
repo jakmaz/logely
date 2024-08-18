@@ -2,10 +2,10 @@ import { promises as fs } from "fs";
 
 // Determine if the log level allows logging the current message
 export function shouldLog(
-  level: "info" | "warn" | "error",
-  logLevel: "info" | "warn" | "error" = "info",
+  level: "info" | "error",
+  logLevel: "info" | "error" = "info",
 ) {
-  const levels = { info: 0, warn: 1, error: 2 };
+  const levels = { info: 0, error: 1 };
   return levels[level] >= levels[logLevel];
 }
 
