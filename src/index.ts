@@ -47,7 +47,7 @@ export const logger = (options?: Options) => {
     })
     .onAfterResponse(
       { as: "global" },
-      ({ request, body, set, store, response, headers, cookie }) => {
+      ({ store, request, body, response, set }) => {
         const responseDuration = store.requestStartTime;
         const url = new URL(request.url);
 
@@ -63,8 +63,9 @@ export const logger = (options?: Options) => {
           },
           response: {
             status: set.status,
-            headers: headers,
-            cookie: cookie,
+            headers: set.headers,
+            cookie: set.cookie,
+            redirect: set.redirect,
             body: response,
           },
         };

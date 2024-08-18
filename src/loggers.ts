@@ -1,4 +1,5 @@
 import { promises as fs } from "fs";
+import { dirname } from "path";
 
 // Determine if the log level allows logging the current message
 export function shouldLog(
@@ -16,11 +17,15 @@ export function logToConsole(components: string[]) {
 }
 
 // Function to log to a file, appending to a JSON log array
+
 export async function logToFile(
   filePath: string,
   logEntry: Record<string, any>,
 ) {
   try {
+    // Ensure the directory exists
+    await fs.mkdir(dirname(filePath), { recursive: true });
+
     let fileContent: string;
 
     // Check if the file exists
