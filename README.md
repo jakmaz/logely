@@ -1,4 +1,4 @@
-# 📝 LogEly 🦊
+# 📝 LogEly 🦊 (Do not use, still in development!)
 
 A **simple**, **clean**, and **sleek** logging middleware for the [Elysia](https://elysiajs.com) web framework. Developed with [Bun](https://bun.sh), Logely is designed to be **minimalistic** yet powerful, giving you the essential tools to keep track of your application's requests and responses effortlessly.
 
@@ -26,7 +26,7 @@ bun add logely
 Integrating Logely into your Elysia application is straightforward:
 
 ```typescript
-import { logger } from "@logely";
+import { logger } from "logely";
 import { Elysia } from "elysia";
 
 const app = new Elysia()
@@ -54,7 +54,7 @@ Logely comes with a variety of options that allow you to customize the logging b
 Here's an example of how you can customize Logely to log requests, include timestamps, and change the log level:
 
 ```typescript
-import { logger } from "@jakmaz/logely";
+import { logger } from "logely";
 import { Elysia } from "elysia";
 
 const app = new Elysia()
